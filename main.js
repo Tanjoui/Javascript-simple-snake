@@ -10,7 +10,7 @@ class Snake {
 	    this.liste = new Array(0); //liste des maillons
 	    //tete = liste[0]
 	    this.vivant = true; //vivant
-	    this.liste.unshift([5,5],[5,6]); //on ajoute 2 maillons au serpent
+	    this.liste.unshift([5,5],[5,6],[5,7]); //on ajoute 2 maillons au serpent
 
 	    console.log(this.liste);
 	}
@@ -23,9 +23,10 @@ class Model {
 		this.sizey = 10;
 	    this.grille = new Array(this.sizex).fill(new Array(this.sizey).fill(0)); //map full zero
 	    this.snake = new Snake();
+			this.setSnake();
 	    //création de la carte et d'un seprent
 	    console.log(this.grille);
-	    addFruit(); //on place un fruit
+	    this.addFruit(); //on place un fruit
 	    console.log(this.grille);
 	}
 	  // 0 : vide
@@ -65,11 +66,12 @@ class Model {
 		let liste = this.snake.getListe();
 		for (var i = 0; i < liste.length; i ++) {
 			console.log("Contenu de e : "+ liste[i]);
-			this.setTile(liste[i][0],liste[i][1],0);
+			if ( getTile(liste[i][0],liste[i][1])==1 || getTile(liste[i][0],liste[i][1])==2){
+				this.setTile(liste[i][0],liste[i][1],0);
 			}
 		}
-
 	}
+
 	setSnake(){
 		let liste = this.snake.getListe();
 		this.setTile(liste[0][0],liste[0][1],1);
@@ -207,7 +209,7 @@ class Controller {
 	}
 
 
-	function clavier(e){
+	clavier(e){
 		k = e.keyCode;
   		e.preventDefault(); //annuler le comportement par défaut des flèches
 	  	switch(k) {
@@ -228,7 +230,7 @@ class Controller {
 	}
 
 	run(){
-	          setInterval(let grille = Model.step() , 1000); //chaque seconde execute un step
+	         let grille = setInterval(Model.step() , 1000); //chaque seconde execute un step
 	}
 }
 

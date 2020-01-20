@@ -11,23 +11,36 @@ class Snake {
 	    //tete = liste[0]
 	    this.vivant = true; //vivant
 	    this.liste.unshift([5,5],[5,6],[5,7]); //on ajoute 2 maillons au serpent
-
-	    console.log(this.liste);
 	}
 }
 
 
 class Model {
+	logtab(){
+		console.log("affichage de la grille ");
+		var text="";
+		for (var i = 0; i < this.sizex; i ++ ){
+			for ( var j = 0; j < this.sizey ; j ++ ){
+				text = text + this.grille[i][j]+" ";
+			}
+			text= text + "<br>";
+			document.getElementById("slt").innerHTML=text;
+		}
+	}
+
 	constructor(canvas) {
 		this.sizex = 10;
 		this.sizey = 10;
-	    this.grille = new Array(this.sizex).fill(new Array(this.sizey).fill(0)); //map full zero
+		this.time = 0;
+	    this.grille = new Array(this.sizex); //map full zero
+			for ( var i = 0 ; i < this.sizex; i ++){
+				this.grille[i]=new Array(this.sizey).fill(0);
+			}
 	    this.snake = new Snake();
 			this.setSnake();
 	    //création de la carte et d'un seprent
-	    console.log(this.grille);
 	    this.addFruit(); //on place un fruit
-	    console.log(this.grille);
+			this.logtab();
 	}
 	  // 0 : vide
 	  // 1 : head_snake
@@ -42,25 +55,26 @@ class Model {
 	  	}
 	}
 	getTile(x,y){
+		console.log("Tentative d'accee a la grille coord" +x + ":"+y);
 	  	if (x < this.sizex && x > 0 && y < this.sizey && y > 0){
-	  		return grille[x][y];
+	  		return this.grille[x][y];
 	  	}
 	  	else {
 	  		return 0;
 	  	}
 	}
 	getgrille(){
-	  	return grille;
+	  	return this.grille;
 	}
 
 	addFruit(){
-	  	let x = grille.random();
-	  	let y = grille.random();
-	  	while (getTile(x,y) != 0){
-	  		x = grille.random();
-	  		y = grille.random();
+	  	let x = Math.floor(Math.random() * (this.sizex));
+	  	let y = Math.floor(Math.random() * this.sizey);
+	  	while (this.getTile(x,y) != 0){
+	  		x = Math.floor(Math.random() * (this.sizex));
+	  		y = Math.floor(Math.random()* this.sizey);
 	  	}
-	  	setTile(x,y,3);
+	  	this.setTile(x,y,3);
 	}
 	removeSnake(){
 		let liste = this.snake.getListe();
@@ -86,34 +100,35 @@ class Model {
 
 
   	step(){
-  		time = temps+1;
-        move(); //nouveau mouvement
-        return grille;
+  		this.time = this.time+1;
+        this.move(); //nouveau mouvement
+        return this.grille;
   	}
 
   	move(){//deplace le serpent
-        switch(snake.direction){ //génération d'une nouvelle tête selon la direction
+			var head;
+        switch(this.snake.direction){ //génération d'une nouvelle tête selon la direction
           case 1 :
-          head = (snake.liste[0]-1, snake.liste[1].y)
+          head = (this.snake.liste[0]-1, this.snake.liste[1].y)
           case 2 :
-          head = (snake.liste[0], snake.liste[1].y-1)
+          head = (this.snake.liste[0], this.snake.liste[1].y-1)
           case 3 :
-          head = (snake.liste[0]+1, snake.liste[1].y)
+          head = (this.snake.liste[0]+1, this.snake.liste[1].y)
           case 4 :
-          head = (snake.liste[0], snake.liste[1]+1)
+          head = (this.snake.liste[0], this.snake.liste[1]+1)
         }
-        checkWall(head[0], head[1])
-    	checkBody(head[0], head[1])
-        let found = checkFruit(head[0], head[1])// on passe les tests de collision
+        this.checkWall(head[0], head[1])
+    	this.checkBody(head[0], head[1])
+        let found = this.checkFruit(head[0], head[1])// on passe les tests de collision
 
-        snake.liste.unshift(head); //on ajoute une nouvelle tête au debut
+        this.snake.liste.unshift(head); //on ajoute une nouvelle tête au debut
         if(found = 0){ //si on a pas trouvé de fruit
-                snake.pop(); //on supprime le dernier element
+	      	this.getListe().pop(); //on supprime le dernier element
         }
     }
 
     checkWall(x, y){
-      	if(x >= size || y>= size || x <= 0 || y < 0){
+      	if(x >= this.sizex || y>= this.sizey || x < 0 || y < 0){
       		console.log("PERDU")
       		sound(2)
       		Controller.reset()
@@ -122,8 +137,8 @@ class Model {
 
     checkBody(x, y){
     	//vérifie si la nouvelle tête rencontre le body
-	    for(i=0; i<snake.liste.length; i++){
-	          	if(snake.liste[i][0] == x && snake.liste[i][1] == y){
+	    for(var i=0; i<this.snake.liste.length; i++){
+	          	if(this.snake.liste[i][0] == x && this.snake.liste[i][1] == y){
 	          		console.log("PERDU")
 	          		sound(2)
 	          		Controller.reset()
@@ -132,9 +147,9 @@ class Model {
 	    }
     checkFruit(x, y){
         //vérifie si on mange un fruit
-        if(grille[x][y] = 2){
-          	console.log("fruit trouvé")
-          	sound(1)
+        if(this.grille[x][y] = 2){
+          	console.log("fruit trouvé");
+          	this.sound(1);
           	return 1;
         }else{
           	return 0;
@@ -144,35 +159,35 @@ class Model {
 	turn(direction){// change la direction du serpent selon l'inpout
 		switch(direction){
             case 1 ://gauche
-            if(head.dir == 3){
-            	console.log("move impossible")
-            	sound(2)
+            if(this.snake.dir == 3){
+            	console.log("move impossible");
+            	this.sound(2);
             }else{
-            	snake.dir = 1
+            	this.snake.dir = 1;
             }
 
             case 2 ://haut
-            if(head.dir == 4){
+            if(this.snake.dir == 4){
             	console.log("move impossible")
-            	sound(2)
+            	this.sound(2)
             }else{
-            	snake.dir = 2
+            	this.snake.dir = 2
             }
 
             case 3 ://droite
-            if(head.dir == 1){
+            if(this.snake.dir == 1){
             	console.log("move impossible")
-            	sound(2)
+            	this.sound(2)
             }else{
-            	snake.dir = 3
+            	this.snake.dir = 3
             }
 
             case 4 : //bas
-            if(head.dir == 2){
+            if(this.snake.dir == 2){
             	console.log("move impossible")
-            	sound(2)
+            	this.sound(2)
             }else{
-            	snake.dir = 4
+            	this.snake.dir = 4
             }
 
         }
@@ -184,7 +199,7 @@ class Model {
 			case 1:
 			bruit.src = "son/yea.wav"
 			case 2:
-			ruit.src = "son/blbl.wav"
+			bruit.src = "son/blbl.wav"
 			case 3:
 			bruit.src = "son/gr.wav"
 		}
@@ -230,9 +245,9 @@ class Controller {
 	}
 
 	run(){
-	         let grille = setInterval(Model.step() , 1000); //chaque seconde execute un step
+	         let grille = setInterval(this.model.step() , 1000); //chaque seconde execute un step
 	}
 }
 
   const app = new Controller(new Model(), new View())
-  Controller.run();
+  app.run();

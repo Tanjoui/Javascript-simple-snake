@@ -61,21 +61,38 @@ class Model {
 	  	}
 	  	setTile(x,y,3);
 	}
+	removeSnake(){
+		let liste = this.snake.getListe();
+		for (var i = 0; i < liste.length; i ++) {
+			console.log("Contenu de e : "+ liste[i]);
+			this.setTile(liste[i][0],liste[i][1],0);
+			}
+		}
 
+	}
+	setSnake(){
+		let liste = this.snake.getListe();
+		this.setTile(liste[0][0],liste[0][1],1);
+
+		for (var i = 1; i < liste.length; i ++) {
+			console.log("Contenu de e : "+ liste[i]);
+			this.setTile(liste[i][0],liste[i][1],2);
+			}
+		}
 
 
 
 
   	step(){
   		time = temps+1;
-        move(); //nouveau mouvement 
-        return matrice;
+        move(); //nouveau mouvement
+        return grille;
   	}
 
   	move(){//deplace le serpent
         switch(snake.direction){ //génération d'une nouvelle tête selon la direction
           case 1 :
-          head = (snake.liste[0]-1, snake.liste[1].y) 
+          head = (snake.liste[0]-1, snake.liste[1].y)
           case 2 :
           head = (snake.liste[0], snake.liste[1].y-1)
           case 3 :
@@ -113,7 +130,7 @@ class Model {
 	    }
     checkFruit(x, y){
         //vérifie si on mange un fruit
-        if(matrice[x][y] = 2){
+        if(grille[x][y] = 2){
           	console.log("fruit trouvé")
           	sound(1)
           	return 1;
@@ -166,7 +183,7 @@ class Model {
 			bruit.src = "son/yea.wav"
 			case 2:
 			ruit.src = "son/blbl.wav"
-			case 3: 
+			case 3:
 			bruit.src = "son/gr.wav"
 		}
 		bruit.play();
@@ -192,7 +209,7 @@ class Controller {
 
 	function clavier(e){
 		k = e.keyCode;
-  		e.preventDefault(); //annuler le comportement par défaut des flèches 
+  		e.preventDefault(); //annuler le comportement par défaut des flèches
 	  	switch(k) {
 	        case 37 : // touche gauche
 	        Model.turn(4)
@@ -211,10 +228,9 @@ class Controller {
 	}
 
 	run(){
-	          setInterval(let matrice = Model.step() , 1000); //chaque seconde execute un step
+	          setInterval(let grille = Model.step() , 1000); //chaque seconde execute un step
 	}
 }
 
   const app = new Controller(new Model(), new View())
   Controller.run();
-

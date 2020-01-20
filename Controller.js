@@ -8,6 +8,7 @@ class Controller {
 	}
 
 
+//A changer, preferer des events sur les touches importantes qui trigger la methode turn;
 	clavier(e){
 		k = e.keyCode;
   		e.preventDefault(); //annuler le comportement par défaut des flèches
@@ -29,6 +30,6 @@ class Controller {
 	}
 
 	run(){
-	         let grille = setInterval(this.model.step() , 1000); //chaque seconde execute un step
+    	         window.setInterval(this.model.step() , 1000); //chaque seconde execute un step
 	}
 }

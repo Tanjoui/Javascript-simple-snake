@@ -83,8 +83,10 @@ class Model {
 
 
   	step(){
+      console.log("Log de step num :" + this.time);
   		this.time = this.time+1;
         this.move(); //nouveau mouvement
+        this.logtab();
         return this.grille;
   	}
 
@@ -120,13 +122,13 @@ class Model {
 
     checkBody(x, y){
     	//vérifie si la nouvelle tête rencontre le body
-	    for(var i=0; i<this.snake.liste.length; i++){
-	          	if(this.snake.liste[i][0] == x && this.snake.liste[i][1] == y){
+
+	          	if(this.getTile(this.snake.liste[0][0],this.snake.liste[0][1]) == 2){
 	          		console.log("PERDU")
 	          		sound(2)
 	          		Controller.reset()
 	          	}
-	        }
+
 	    }
     checkFruit(x, y){
         //vérifie si on mange un fruit
@@ -186,7 +188,7 @@ class Model {
 			case 3:
 			bruit.src = "son/gr.wav"
 		}
-		bruit.play();
+		//bruit.play();
 	}
 
 

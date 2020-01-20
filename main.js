@@ -1,2 +1,4 @@
-  const app = new Controller(new Model(), new View())
+	var model = new Model();
+	var view = new View();
+	const app = new Controller(model, view)
   app.run();

@@ -30,6 +30,11 @@ class Controller {
 	}
 
 	run(){
-    	         window.setInterval(this.model.step() , 1000); //chaque seconde execute un step
+            console.log("Starting Game ");
+    	      setInterval(()=> {this.model.step()}, 1000); //chaque seconde execute un step
 	}
+  reset(){
+    console.log("reset");
+    return;
+  }
 }

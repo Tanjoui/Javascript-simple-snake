@@ -4,16 +4,18 @@ class Model {
 		var text="";
 		for (var i = 0; i < this.sizex; i ++ ){
 			for ( var j = 0; j < this.sizey ; j ++ ){
-				text = text + this.grille[i][j]+" ";
+				text = text + this.grille[j][i]+" ";
 			}
 			text= text + "<br>";
-			document.getElementById("slt").innerHTML=text;
 		}
+    // console.log(text)
+    document.getElementById("slt").innerHTML="";
+    document.getElementById("slt").innerHTML=text;
 	}
 
 	constructor(canvas) {
-		this.sizex = 10;
-		this.sizey = 10;
+		this.sizex = 20;
+		this.sizey = 20;
 		this.time = 0;
 	    this.grille = new Array(this.sizex); //map full zero
 			for ( var i = 0 ; i < this.sizex; i ++){
@@ -23,14 +25,13 @@ class Model {
 			this.setSnake();
 	    //création de la carte et d'un seprent
 	    this.addFruit(); //on place un fruit
-			this.logtab();
 	}
 	  // 0 : vide
 	  // 1 : head_snake
 	  // 2 : body_snake
 	  // 3 : fruit
 	setTile(x,y,val){
-	  	if (x < this.sizex && x > 0 && y < this.sizey && y > 0){
+	  	if (x < this.sizex && x >= 0 && y < this.sizey && y >= 0){
 	  		if ( val <= 3){
 	  			this.grille[x][y]=val;
 	  			console.log("Ecriture de "+ val + " aux coord "+x+":"+y);
@@ -39,7 +40,8 @@ class Model {
 	}
 	getTile(x,y){
 		console.log("Tentative d'accee a la grille coord" +x + ":"+y);
-	  	if (x < this.sizex && x > 0 && y < this.sizey && y > 0){
+	  	if (x < this.sizex && x >= 0 && y < this.sizey && y >= 0){
+        console.log("Reponse : "+this.grille[x][y]);
 	  		return this.grille[x][y];
 	  	}
 	  	else {
@@ -63,7 +65,7 @@ class Model {
 		let liste = this.snake.getListe();
 		for (var i = 0; i < liste.length; i ++) {
 			console.log("Contenu de e : "+ liste[i]);
-			if ( getTile(liste[i][0],liste[i][1])==1 || getTile(liste[i][0],liste[i][1])==2){
+			if ( this.getTile(liste[i][0],liste[i][1])==1 || this.getTile(liste[i][0],liste[i][1])==2){
 				this.setTile(liste[i][0],liste[i][1],0);
 			}
 		}
@@ -74,7 +76,6 @@ class Model {
 		this.setTile(liste[0][0],liste[0][1],1);
 
 		for (var i = 1; i < liste.length; i ++) {
-			console.log("Contenu de e : "+ liste[i]);
 			this.setTile(liste[i][0],liste[i][1],2);
 			}
 		}
@@ -83,39 +84,48 @@ class Model {
 
 
   	step(){
-      console.log("Log de step num :" + this.time);
+      this.logtab();
+      console.log("Log de game : " + this+", step num :" + this.time);
   		this.time = this.time+1;
-        this.move(); //nouveau mouvement
-        this.logtab();
-        return this.grille;
+      this.move(); //nouveau mouvement
+      return this.grille;
   	}
 
   	move(){//deplace le serpent
 			var head;
-        switch(this.snake.direction){ //génération d'une nouvelle tête selon la direction
+        console.log(this.snake.liste + "dir :"+this.snake.direction);
+        switch(this.snake.direction){ //calcul des coords de la prochaine tete selon la direction
           case 1 :
-          head = (this.snake.liste[0]-1, this.snake.liste[1].y)
+          head = [this.snake.liste[0][0]-1, this.snake.liste[0][1]]
+          break;
           case 2 :
-          head = (this.snake.liste[0], this.snake.liste[1].y-1)
+          head = [this.snake.liste[0][0], this.snake.liste[0][1]-1]
+          break;
           case 3 :
-          head = (this.snake.liste[0]+1, this.snake.liste[1].y)
+          head = [this.snake.liste[0][0]+1, this.snake.liste[0][1]]
+          break;
           case 4 :
-          head = (this.snake.liste[0], this.snake.liste[1]+1)
+          head = [this.snake.liste[0][0], this.snake.liste[0][1]+1]
+          break;
         }
-        this.checkWall(head[0], head[1])
-    	this.checkBody(head[0], head[1])
+        console.log("case a check : "+head[0]+" "+head[1]);
+        this.checkWall(head[0], head[1]);
+    	  this.checkBody(head[0], head[1]);
         let found = this.checkFruit(head[0], head[1])// on passe les tests de collision
-
+        this.removeSnake();
         this.snake.liste.unshift(head); //on ajoute une nouvelle tête au debut
-        if(found = 0){ //si on a pas trouvé de fruit
-	      	this.getListe().pop(); //on supprime le dernier element
+        if(found == 0){ //si on a pas trouvé de fruit
+	      	this.snake.getListe().pop(); //on supprime le dernier element
         }
+        console.log(this.snake.liste);
+        this.setSnake();
+        console.log("dir :"+this.snake.direction);
     }
 
     checkWall(x, y){
       	if(x >= this.sizex || y>= this.sizey || x < 0 || y < 0){
       		console.log("PERDU")
-      		sound(2)
+      		this.sound(2)
       		Controller.reset()
       	}
     }
@@ -123,16 +133,16 @@ class Model {
     checkBody(x, y){
     	//vérifie si la nouvelle tête rencontre le body
 
-	          	if(this.getTile(this.snake.liste[0][0],this.snake.liste[0][1]) == 2){
+	          	if(this.getTile(x,y) == 2){
 	          		console.log("PERDU")
-	          		sound(2)
+	          		this.sound(2)
 	          		Controller.reset()
 	          	}
 
 	    }
     checkFruit(x, y){
         //vérifie si on mange un fruit
-        if(this.grille[x][y] = 2){
+        if(this.grille[x][y] ==  3){
           	console.log("fruit trouvé");
           	this.sound(1);
           	return 1;

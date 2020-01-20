@@ -4,7 +4,22 @@ class Model {
 		var text="";
 		for (var i = 0; i < this.sizex; i ++ ){
 			for ( var j = 0; j < this.sizey ; j ++ ){
-				text = text + this.grille[j][i]+" ";
+        var tmp = "";
+        switch (this.grille[j][i]){
+          case 0 :
+          tmp = "□";
+          break;
+          case 1 :
+          tmp = "●";
+          break;
+          case 2 :
+          tmp ="■";
+          break;
+          case 3 :
+          tmp = "◈";
+          break;
+        }
+				text = text + tmp+" ";
 			}
 			text= text + "<br>";
 		}

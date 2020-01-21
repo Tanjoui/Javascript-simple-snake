@@ -5,9 +5,12 @@ class Controller {
 	constructor(model, view) {
 		this.model = model
 		this.view = view
+		this.interval = null;
+	}
+	print(matrice){
+		this.view.logtab(matrice);
 	}
 
-	
 
 //A changer, preferer des events sur les touches importantes qui trigger la methode turn;
 	clavier(e){
@@ -33,13 +36,30 @@ class Controller {
 		}
 	} 
 
+	restart(t){
+		if(t == 1){
+
+		}else{
+
+		}
+	}
+
 	run(){
         console.log("Starting Game ");
-    	setInterval(()=> {this.model.step()}, 400); //chaque seconde execute un step
+        this.model.setcontroller(this)
+    	this.interval = setInterval(()=> {this.model.step()}, 100); //chaque seconde execute un step
 		window.addEventListener('keydown',this.clavier)
 	}
-  reset(){
-    console.log("reset");
-    return;
+  	reset(){
+	    console.log("reset");
+	    clearInterval(this.interval); 
+
+		//this.model.removeSnake()
+	    this.model.removeSnake()
+	    this.model.snake.resetBody(this.model.sizex, this.model.sizey)
+	    
+
+	    this.run()
+	    return;
   }
 }

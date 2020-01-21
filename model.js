@@ -1,42 +1,21 @@
 class Model {
-	logtab(){
-		console.log("affichage de la grille ");
-		var text="";
-		for (var i = 0; i < this.sizex; i ++ ){
-			for ( var j = 0; j < this.sizey ; j ++ ){
-        var tmp = "";
-        switch (this.grille[j][i]){
-          case 0 :
-          tmp = "□";
-          break;
-          case 1 :
-          tmp = "●";
-          break;
-          case 2 :
-          tmp ="■";
-          break;
-          case 3 :
-          tmp = "◈";
-          break;
-        }
-				text = text + tmp+" ";
-			}
-			text= text + "<br>";
-		}
-    // console.log(text)
-    document.getElementById("slt").innerHTML="";
-    document.getElementById("slt").innerHTML=text;
-	}
 
-	constructor(canvas) {
-		this.sizex = 20;
+  setcontroller(c){
+    this.cont = c;
+  }
+
+
+
+	constructor(cont) {
+    this.cont = cont
+    this.sizex = 20;
 		this.sizey = 20;
 		this.time = 0;
 	    this.grille = new Array(this.sizex); //map full zero
 			for ( var i = 0 ; i < this.sizex; i ++){
 				this.grille[i]=new Array(this.sizey).fill(0);
 			}
-	    this.snake = new Snake();
+	    this.snake = new Snake(this.sizex, this.sizey);
 			this.setSnake();
 	    //création de la carte et d'un seprent
 	    this.addFruit(); //on place un fruit
@@ -99,7 +78,7 @@ class Model {
 
 
   	step(){
-      this.logtab();
+      this.cont.print(this.grille)
       //console.log("Log de game : " + this+", step num :" + this.time);
   		this.time = this.time+1;
       this.move(); //nouveau mouvement
@@ -114,6 +93,7 @@ class Model {
             this.sound(2);
           }else{
             this.snake.direction = 1;
+            this.sound(3)
           }
           break;
         case 2:
@@ -122,6 +102,7 @@ class Model {
             this.sound(2);
           }else{
             this.snake.direction = 2;
+            this.sound(3)
           }
           break;
         case 3:
@@ -130,6 +111,7 @@ class Model {
             this.sound(2);
           }else{
             this.snake.direction = 3;
+            this.sound(3)
           }
           break;
         case 4:
@@ -138,6 +120,7 @@ class Model {
             this.sound(2);
           }else{
             this.snake.direction = 4;
+            this.sound(3)
           }
           break;
       }
@@ -162,8 +145,15 @@ class Model {
           break;
         }
         console.log("case a check : "+head[0]+" "+head[1]);
-        this.checkWall(head[0], head[1]);
-    	  this.checkBody(head[0], head[1]);
+       
+
+        let lose1 = this.checkWall(head[0], head[1]);
+    	  let lose2 = this.checkBody(head[0], head[1]);
+        if(lose1 == 1 || lose2 == 1){
+          this.cont.reset();
+          return 0;
+        }
+
         let found = this.checkFruit(head[0], head[1])// on passe les tests de collision
         this.removeSnake();
         this.snake.liste.unshift(head); //on ajoute une nouvelle tête au debut
@@ -179,7 +169,7 @@ class Model {
       	if(x >= this.sizex || y>= this.sizey || x < 0 || y < 0){
       		console.log("PERDU")
       		this.sound(2)
-      		Controller.reset()
+      		return 1;
       	}
     }
 
@@ -189,7 +179,7 @@ class Model {
 	          	if(this.getTile(x,y) == 2){
 	          		console.log("PERDU")
 	          		this.sound(2)
-	          		Controller.reset()
+	          		return 1;
 	          	}
 
 	    }
@@ -203,6 +193,10 @@ class Model {
         }else{
           	return 0;
         }
+    }
+
+    reset(){
+      this.snake.resetBody()
     }
 
 

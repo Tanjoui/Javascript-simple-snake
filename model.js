@@ -198,6 +198,7 @@ class Model {
         if(this.grille[x][y] ==  3){
           	console.log("fruit trouvé");
           	this.sound(1);
+            this.addFruit();
           	return 1;
         }else{
           	return 0;

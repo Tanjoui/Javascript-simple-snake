@@ -211,10 +211,13 @@ class Model {
 		switch(id){
 			case 1:
 			bruit.src = "son/yea.wav"
+      break;
 			case 2:
 			bruit.src = "son/blbl.wav"
+      break;
 			case 3:
 			bruit.src = "son/gr.wav"
+      break;
 		}
 		bruit.play();
 	}

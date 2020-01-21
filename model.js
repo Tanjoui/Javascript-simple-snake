@@ -49,14 +49,14 @@ class Model {
 	  	if (x < this.sizex && x >= 0 && y < this.sizey && y >= 0){
 	  		if ( val <= 3){
 	  			this.grille[x][y]=val;
-	  			console.log("Ecriture de "+ val + " aux coord "+x+":"+y);
+	  			//console.log("Ecriture de "+ val + " aux coord "+x+":"+y);
 	  		}
 	  	}
 	}
 	getTile(x,y){
-		console.log("Tentative d'accee a la grille coord" +x + ":"+y);
+		//console.log("Tentative d'accee a la grille coord" +x + ":"+y);
 	  	if (x < this.sizex && x >= 0 && y < this.sizey && y >= 0){
-        console.log("Reponse : "+this.grille[x][y]);
+        //console.log("Reponse : "+this.grille[x][y]);
 	  		return this.grille[x][y];
 	  	}
 	  	else {
@@ -79,7 +79,7 @@ class Model {
 	removeSnake(){
 		let liste = this.snake.getListe();
 		for (var i = 0; i < liste.length; i ++) {
-			console.log("Contenu de e : "+ liste[i]);
+			//console.log("Contenu de e : "+ liste[i]);
 			if ( this.getTile(liste[i][0],liste[i][1])==1 || this.getTile(liste[i][0],liste[i][1])==2){
 				this.setTile(liste[i][0],liste[i][1],0);
 			}
@@ -100,12 +100,50 @@ class Model {
 
   	step(){
       this.logtab();
-      console.log("Log de game : " + this+", step num :" + this.time);
+      //console.log("Log de game : " + this+", step num :" + this.time);
   		this.time = this.time+1;
       this.move(); //nouveau mouvement
       return this.grille;
   	}
 
+    turn(e){
+      switch(e){
+        case 1:
+          if(this.snake.direction == 3){
+            console.log('et non');
+            this.sound(2);
+          }else{
+            this.snake.direction = 1;
+          }
+          break;
+        case 2:
+          if(this.snake.direction == 4){
+            console.log('et non');
+            this.sound(2);
+          }else{
+            this.snake.direction = 2;
+          }
+          break;
+        case 3:
+          if(this.snake.direction == 1){
+            console.log('et non');
+            this.sound(2);
+          }else{
+            this.snake.direction = 3;
+          }
+          break;
+        case 4:
+          if(this.snake.direction == 2){
+            console.log('et non');
+            this.sound(2);
+          }else{
+            this.snake.direction = 4;
+          }
+          break;
+      }
+
+
+    }
   	move(){//deplace le serpent
 			var head;
         console.log(this.snake.liste + "dir :"+this.snake.direction);
@@ -166,42 +204,7 @@ class Model {
         }
     }
 
-	turn(direction){// change la direction du serpent selon l'inpout
-		switch(direction){
-            case 1 ://gauche
-            if(this.snake.dir == 3){
-            	console.log("move impossible");
-            	this.sound(2);
-            }else{
-            	this.snake.dir = 1;
-            }
 
-            case 2 ://haut
-            if(this.snake.dir == 4){
-            	console.log("move impossible")
-            	this.sound(2)
-            }else{
-            	this.snake.dir = 2
-            }
-
-            case 3 ://droite
-            if(this.snake.dir == 1){
-            	console.log("move impossible")
-            	this.sound(2)
-            }else{
-            	this.snake.dir = 3
-            }
-
-            case 4 : //bas
-            if(this.snake.dir == 2){
-            	console.log("move impossible")
-            	this.sound(2)
-            }else{
-            	this.snake.dir = 4
-            }
-
-        }
-    }
 
 	sound(id){// joue un son donné
 		var bruit = new Audio();
@@ -213,7 +216,7 @@ class Model {
 			case 3:
 			bruit.src = "son/gr.wav"
 		}
-		//bruit.play();
+		bruit.play();
 	}
 
 

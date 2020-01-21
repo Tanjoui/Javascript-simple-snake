@@ -7,31 +7,36 @@ class Controller {
 		this.view = view
 	}
 
+	
 
 //A changer, preferer des events sur les touches importantes qui trigger la methode turn;
 	clavier(e){
-		k = e.keyCode;
+		console.log(e)
+		let k = e.keyCode;
+		console.log(k)
   		e.preventDefault(); //annuler le comportement par défaut des flèches
+	  	
 	  	switch(k) {
 	        case 37 : // touche gauche
-	        Model.turn(4)
+	        this.model.turn(1)
 	        break;
 		    case 38 : // touche haut
-		    Model.turn(1)
+		    this.model.turn(2)
 		    break;
 		    case 39 : // touche droite
-		    Model.turn(2)
+		    this.model.turn(3)
 		    break;
 		    case 40 : // touche bas
-		    Model.turn(3)
+		    this.model.turn(4)
 		    break;
 		    default :
 		}
-	}
+	} 
 
 	run(){
-            console.log("Starting Game ");
-    	      setInterval(()=> {this.model.step()}, 1000); //chaque seconde execute un step
+        console.log("Starting Game ");
+    	setInterval(()=> {this.model.step()}, 400); //chaque seconde execute un step
+		window.addEventListener('keydown',this.clavier)
 	}
   reset(){
     console.log("reset");

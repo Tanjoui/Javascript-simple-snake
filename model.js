@@ -78,7 +78,7 @@ class Model {
 
 
   	step(){
-      this.cont.print(this.grille)
+      this.cont.print(this.grille, this.snake.direction)
       //console.log("Log de game : " + this+", step num :" + this.time);
   		this.time = this.time+1;
       this.move(); //nouveau mouvement
@@ -145,7 +145,7 @@ class Model {
           break;
         }
         console.log("case a check : "+head[0]+" "+head[1]);
-       
+
 
         let lose1 = this.checkWall(head[0], head[1]);
     	  let lose2 = this.checkBody(head[0], head[1]);

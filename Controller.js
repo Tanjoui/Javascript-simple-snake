@@ -7,8 +7,9 @@ class Controller {
 		this.view = view
 		this.interval = null;
 	}
-	print(matrice){
-		this.view.logtab(matrice);
+	print(matrice, direction){
+		// this.view.logtab(matrice);
+		this.view.drawentities(matrice,direction);
 	}
 
 
@@ -18,7 +19,7 @@ class Controller {
 		let k = e.keyCode;
 		console.log(k)
   		e.preventDefault(); //annuler le comportement par défaut des flèches
-	  	
+
 	  	switch(k) {
 	        case 37 : // touche gauche
 	        this.model.turn(1)
@@ -34,7 +35,7 @@ class Controller {
 		    break;
 		    default :
 		}
-	} 
+	}
 
 	restart(t){
 		if(t == 1){
@@ -47,17 +48,18 @@ class Controller {
 	run(){
         console.log("Starting Game ");
         this.model.setcontroller(this)
-    	this.interval = setInterval(()=> {this.model.step()}, 100); //chaque seconde execute un step
+				this.view.drawbackground(20);
+    	this.interval = setInterval(()=> {this.model.step()}, 300); //chaque seconde execute un step
 		window.addEventListener('keydown',this.clavier)
 	}
   	reset(){
 	    console.log("reset");
-	    clearInterval(this.interval); 
+	    clearInterval(this.interval);
 
 		//this.model.removeSnake()
 	    this.model.removeSnake()
 	    this.model.snake.resetBody(this.model.sizex, this.model.sizey)
-	    
+
 
 	    this.run()
 	    return;

@@ -1,11 +1,15 @@
 class View {
-	constructor() {
+	constructor(size) {
+		this.size = size;
 		this.canv = document.getElementById("Canvas");
 		this.canv.heigth=704;
 		this.canv.width=704;
 		this.canv.style.width  = '704px';
 		this.canv.style.height = '704px';
-		this.oldgrille;
+		this.oldgrille = new Array(this.size); //map full zero
+		 for ( var i = 0 ; i < this.size; i ++){
+			 this.oldgrille[i]=new Array(this.sizey).fill(0);
+		 };
 	}
 	drawfloor(dim,mur){
 
@@ -44,6 +48,9 @@ class View {
 			for ( var j = 0 ; j<grille.length;j++){
 				var x = 32+i*32;
 				var y = 32+j*32;
+				if (grille[i][j]!=this.oldgrille[i][j]){
+					ctx.drawImage(sol,x,y,32,32);
+					this.oldgrille[i][j]=grille[i][j];
 				switch (grille[i][j]){
 					case 1 :
 					ctx.save();
@@ -76,11 +83,10 @@ class View {
 					default :
 					ctx.drawImage(sol,x,y,32,32);
 					break;
-
+				}
 				}
 			}
 		}
-		this.oldgrille=grille;
 	}
 	logtab(grille){
 		console.log("affichage de la grille ");

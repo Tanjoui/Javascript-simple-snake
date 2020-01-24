@@ -6,8 +6,10 @@ class Controller {
 		this.model = model;
 		this.view = view;
 		this.interval = null;
-		this.bindDrawtoModel = (matrice,dir) => {
+		this.bindDrawtoModel = (matrice,dir, score, highscore) => {
 			this.view.drawentities(matrice,dir);
+			this.view.drawscore(score, highscore)
+
 		}
 		this.model.binddraw(this.bindDrawtoModel);
 		}
@@ -47,21 +49,23 @@ class Controller {
 	run(){
         console.log("Starting Game ");
         this.model.setcontroller(this)
-				this.view.drawbackground(20);
+		this.view.drawbackground(20);
     	this.interval = setInterval(()=> {this.model.step()}, 100); //chaque seconde execute un step
 		window.addEventListener('keydown',this.clavier)
+		this.printscore = setInterval(()=> {this.view.drawscore(this.model)}, 100);
 	}
 
   	reset(){
 	    console.log("reset");
 	    clearInterval(this.interval);
-
+	    this.model.setscore();
 		this.model.deleteFruit();
 		this.print(this.model.grille, this.model.snake.direction)
 	    this.model.removeSnake()
 	    this.model.snake.resetBody(this.model.sizex, this.model.sizey)
 	    this.model.addFruit()
 	    this.sleep(100)
+	    this.view.drawhighscore(this.model)
 	    this.run()
 	    return;
   }

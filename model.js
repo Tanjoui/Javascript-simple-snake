@@ -6,9 +6,11 @@ class Model {
 
 
   drawTiles(){
-    this.draw(this.grille, this.snake.direction);
+    this.draw(this.grille, this.snake.direction, this.score, this.highscore);
   }
 	constructor(cont) {
+    this.score = 0;
+    this.highscore = 0;
     this.cont = cont
     this.sizex = 20;
 		this.sizey = 20;
@@ -25,6 +27,13 @@ class Model {
 	    this.addFruit(); //on place un fruit
 
 	}
+
+  setscore(){
+    if(this.score>this.highscore){
+      this.highscore = this.score;
+    }
+    this.score = 0;
+  }
 
   binddraw(callback){
     this.draw=callback;
@@ -98,6 +107,7 @@ class Model {
   		this.time = this.time+1;
       this.move(); //nouveau mouvement
       this.drawTiles();
+      this.score ++
       return this.grille;
   	}
 
@@ -206,6 +216,7 @@ class Model {
         //vérifie si on mange un fruit
         if(this.grille[x][y] ==  3){
           	console.log("fruit trouvé");
+            this.score = this.score + 100
           	this.sound(1);
             this.addFruit();
           	return 1;

@@ -11,9 +11,6 @@ class View {
 			 this.oldgrille[i]=new Array(this.sizey).fill(0);
 		 };
 	}
-	// bindGfxtoModel(){
-	// 	drawentities(this.grille,this.snake.direction);
-	// }
 	drawbackground(dim){
 		var ctx = this.canv.getContext("2d");
 		ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -33,7 +30,7 @@ class View {
 		for (var i =0; i < dim; i ++){
 			for (var j = 0 ; j < dim; j ++){
 				ctx.drawImage(bckgrnd,32+i*32,32+j*32,32,32);
-				console.log("Affichage de l'image "+i+":"+j);
+				//console.log("Affichage de l'image "+i+":"+j);
 			}
 		}
 	}
@@ -70,7 +67,7 @@ class View {
 							ctx.rotate(180*(Math.PI/180));
 							break;
 					}
-					console.log("Draw head");
+					//console.log("Draw head");
 					ctx.drawImage(head, 0, 0, 32, 32,-16, -16, 32, 32);
 					ctx.restore();
 					break;

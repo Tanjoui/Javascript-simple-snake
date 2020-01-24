@@ -20,7 +20,10 @@ class Model {
 	    this.snake = new Snake(this.sizex, this.sizey);
 			this.setSnake();
 	    //création de la carte et d'un seprent
+      this.xFruit = 0;
+      this.yFruit = 0;
 	    this.addFruit(); //on place un fruit
+
 	}
 
   binddraw(callback){
@@ -52,6 +55,9 @@ class Model {
 	getgrille(){
 	  	return this.grille;
 	}
+  deleteFruit(){
+    this.setTile(this.xFruit, this.yFruit, 0)
+  }
 
 	addFruit(){
 	  	let x = Math.floor(Math.random() * (this.sizex));
@@ -60,6 +66,8 @@ class Model {
 	  		x = Math.floor(Math.random() * (this.sizex));
 	  		y = Math.floor(Math.random()* this.sizey);
 	  	}
+      this.xFruit = x;
+      this.yFruit = y;
 	  	this.setTile(x,y,3);
 	}
 	removeSnake(){
@@ -89,6 +97,7 @@ class Model {
       //console.log("Log de game : " + this+", step num :" + this.time);
   		this.time = this.time+1;
       this.move(); //nouveau mouvement
+      this.cont.print(this.grille, this.snake.direction)
       return this.grille;
   	}
 
@@ -157,6 +166,7 @@ class Model {
         let lose1 = this.checkWall(head[0], head[1]);
     	  let lose2 = this.checkBody(head[0], head[1]);
         if(lose1 == 1 || lose2 == 1){
+          //this.cont.interval = setTimeout(wait, 200);
           this.cont.reset();
           return 0;
         }
@@ -171,6 +181,8 @@ class Model {
         this.setSnake();
         console.log("dir :"+this.snake.direction);
     }
+
+
 
     checkWall(x, y){
       	if(x >= this.sizex || y>= this.sizey || x < 0 || y < 0){

@@ -5,7 +5,9 @@ class Model {
   }
 
 
-
+  drawTiles(){
+    this.draw(this.grille, this.snake.direction);
+  }
 	constructor(cont) {
     this.cont = cont
     this.sizex = 20;
@@ -20,6 +22,11 @@ class Model {
 	    //création de la carte et d'un seprent
 	    this.addFruit(); //on place un fruit
 	}
+
+  binddraw(callback){
+    this.draw=callback;
+  }
+
 	  // 0 : vide
 	  // 1 : head_snake
 	  // 2 : body_snake
@@ -78,7 +85,7 @@ class Model {
 
 
   	step(){
-      this.cont.print(this.grille, this.snake.direction)
+      this.drawTiles();
       //console.log("Log de game : " + this+", step num :" + this.time);
   		this.time = this.time+1;
       this.move(); //nouveau mouvement

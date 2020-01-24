@@ -3,10 +3,15 @@ class Controller {
 
 
 	constructor(model, view) {
-		this.model = model
-		this.view = view
+		this.model = model;
+		this.view = view;
 		this.interval = null;
-	}
+		this.bindDrawtoModel = (matrice,dir) => {
+			this.view.drawentities(matrice,dir);
+		}
+		this.model.binddraw(this.bindDrawtoModel);
+		}
+
 	print(matrice, direction){
 		// this.view.logtab(matrice);
 		this.view.drawentities(matrice,direction);

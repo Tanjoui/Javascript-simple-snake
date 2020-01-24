@@ -11,9 +11,9 @@ class View {
 			 this.oldgrille[i]=new Array(this.sizey).fill(0);
 		 };
 	}
-	drawfloor(dim,mur){
-
-	}
+	// bindGfxtoModel(){
+	// 	drawentities(this.grille,this.snake.direction);
+	// }
 	drawbackground(dim){
 		var ctx = this.canv.getContext("2d");
 		ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height)

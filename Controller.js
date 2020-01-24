@@ -37,31 +37,35 @@ class Controller {
 		}
 	}
 
-	restart(t){
-		if(t == 1){
 
-		}else{
-
-		}
-	}
 
 	run(){
         console.log("Starting Game ");
         this.model.setcontroller(this)
 				this.view.drawbackground(20);
-    	this.interval = setInterval(()=> {this.model.step()}, 300); //chaque seconde execute un step
+    	this.interval = setInterval(()=> {this.model.step()}, 100); //chaque seconde execute un step
 		window.addEventListener('keydown',this.clavier)
 	}
+
   	reset(){
 	    console.log("reset");
 	    clearInterval(this.interval);
 
-		//this.model.removeSnake()
+		this.model.deleteFruit();
+		this.print(this.model.grille, this.model.snake.direction)
 	    this.model.removeSnake()
 	    this.model.snake.resetBody(this.model.sizex, this.model.sizey)
-
-
+	    this.model.addFruit()
+	    this.sleep(100)
 	    this.run()
 	    return;
   }
+  sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
 }

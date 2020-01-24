@@ -93,11 +93,11 @@ class Model {
 
 
   	step(){
-      this.drawTiles();
+
       //console.log("Log de game : " + this+", step num :" + this.time);
   		this.time = this.time+1;
       this.move(); //nouveau mouvement
-      this.cont.print(this.grille, this.snake.direction)
+      this.drawTiles();
       return this.grille;
   	}
 

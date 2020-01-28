@@ -32,6 +32,24 @@ class View {
 		this.fruit = document.getElementById("fruit_"+text);
 	}
 
+	drawscore(score, highscore){
+		if(highscore * 4 < score){
+			document.getElementById("score").style.color = "red"
+		}else if(highscore * 2 < score){
+			document.getElementById("score").style.color = "green"
+		}else if(highscore < model.score){
+			document.getElementById("score").style.color = "yellow"
+		}else{
+			document.getElementById("score").style.color = "black"
+		}
+		document.getElementById("score").innerHTML = model.score
+	}
+
+	drawhighscore(model){
+		document.getElementById("highscore").innerHTML = model.highscore
+	}
+
+
 	drawbackground(dim){
 
 		this.ctx.clearRect( 0, 0, this.ctx.canvas.width, this.ctx.canvas.height)

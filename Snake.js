@@ -8,7 +8,7 @@ class Snake {
 		this.liste = [];
 		let x = Math.floor(Math.random() * sx);
 	  	let y = Math.floor(Math.random() * sy);
-		let direction = Math.floor(Math.random() * 3 + 1); 
+		let direction = Math.floor(Math.random() * 3 + 1);
 		this.direction = direction;
 		switch(direction){
 			case 1:
@@ -24,15 +24,28 @@ class Snake {
 			this.liste.unshift([x,y],[x-1,y],[x-2,y]);
 			break;
 		}
-		console.log("JE SUIS LE DEBUG")
-		console.log(x)
-		console.log(y)
-		console.log(this.direction)
+	}
+
+	getBodyDir(){
+		var x1 = this.liste[0][0];
+		var y1 = this.liste[0][1];
+		var x2 = this.liste[1][0];
+		var y2 = this.liste[1][1];
+		if ( x1 == x2 + 1){
+			return 1;
+		}
+		if ( x1 == x2 - 1){
+			return 3;
+		}
+		if ( y1 == y2 + 1){
+			return 2;
+		}
+		else return 4;
 	}
 
 	constructor(sx, sy){
-	    
-	    
+
+
 	    this.liste = new Array(0); //liste des maillons
 		this.vivant = true; //vivant
 		this.resetBody(sx, sy)

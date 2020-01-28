@@ -17,7 +17,7 @@ class Controller {
 		document.getElementById("fruit0").addEventListener("click",this.changeFruit(0));
 		document.getElementById("fruit1").addEventListener("click",this.changeFruit(1));
 	}
-	
+
 	changeSnake(text){
 		this.skin[0]=text;
 
@@ -52,7 +52,7 @@ class Controller {
 			this.model.turn(4)
 			break;
 			case 82:
-			this.reset();
+			this.model.reset();
 			break;
 			default :
 		}
@@ -63,14 +63,18 @@ class Controller {
 	run(){
 		console.log("Starting Game ");
 		this.model.setcontroller(this);
+		window.addEventListener('keydown',this.clavier);
 		this.interval = setInterval(()=> {this.model.step()}, 1/document.getElementById("speed").value * 1000); //chaque seconde execute un step
-		window.addEventListener('keydown',this.clavier)
 		this.printscore = setInterval(()=> {this.view.drawscore(this.model)}, 100);
+	}
+
+	pause(){
+		clearInterval(this.interval);
+		this.ispaused=1;
 	}
 
 	reset(){
 		console.log("reset");
-		clearInterval(this.interval);
 		this.model.setscore();
 		this.model.deleteFruit();
 		this.model.removeSnake()

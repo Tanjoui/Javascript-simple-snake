@@ -6,23 +6,38 @@ class Controller {
 		this.model = model;
 		this.view = view;
 		this.interval = null;
-		this.bindDrawtoModel = (matrice,dir) => {
-			this.view.drawentities(matrice,dir);
-		}
+		this.skin = [0,0,0];
+		this.bindDrawtoModel = (matrice,dir) =>{
+				// this.view.logtab(matrice);
+				this.view.drawentities(matrice,dir, this.skin)
+			};
 		this.model.binddraw(this.bindDrawtoModel);
+		document.getElementById("snake0").addEventListener("click",this.changeSnake(0));
+		document.getElementById("snake1").addEventListener("click",this.changeSnake(1));
+		document.getElementById("level0").addEventListener("click",this.changeBckgrnd(0));
+		document.getElementById("level1").addEventListener("click",this.changeBckgrnd(1));
+		document.getElementById("fruit0").addEventListener("click",this.changeFruit(0));
+		document.getElementById("fruit1").addEventListener("click",this.changeFruit(1));
 		}
 
-	print(matrice, direction){
-		// this.view.logtab(matrice);
-		this.view.drawentities(matrice,direction);
-	}
+	changeSnake(text){
+		this.skin[0]=text;
 
+	}
+	changeBckgrnd(text){
+		this.skin[1]=text;
+
+	}
+	changeFruit(text){
+		this.skin[2]=text;
+
+	}
 
 //A changer, preferer des events sur les touches importantes qui trigger la methode turn;
 	clavier(e){
-		console.log(e)
+		// console.log(e)
 		let k = e.keyCode;
-		console.log(k)
+		// console.log(k)
   		e.preventDefault(); //annuler le comportement par défaut des flèches
 
 	  	switch(k) {
@@ -46,18 +61,16 @@ class Controller {
 
 	run(){
         console.log("Starting Game ");
-        this.model.setcontroller(this)
-				this.view.drawbackground(20);
-    	this.interval = setInterval(()=> {this.model.step()}, 100); //chaque seconde execute un step
+        this.model.setcontroller(this);
+
+    	this.interval = setInterval(()=> {this.model.step()}, 1/document.getElementById("speed").value * 1000); //chaque seconde execute un step
 		window.addEventListener('keydown',this.clavier)
 	}
 
   	reset(){
 	    console.log("reset");
 	    clearInterval(this.interval);
-
-		this.model.deleteFruit();
-		this.print(this.model.grille, this.model.snake.direction)
+			this.model.deleteFruit();
 	    this.model.removeSnake()
 	    this.model.snake.resetBody(this.model.sizex, this.model.sizey)
 	    this.model.addFruit()

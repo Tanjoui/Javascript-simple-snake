@@ -3,19 +3,33 @@ class View {
 		this.size = size;
 		this.canv = document.getElementById("Canvas");
 		this.ctx = this.canv.getContext("2d");
-		this.canv.heigth=704;
-		this.canv.width=704;
-		this.canv.style.width  = '704px';
-		this.canv.style.height = '704px';
+		this.canv.height=32 * size+ 2 * 32;
+		this.canv.width=32 * size + 2 * 32;
+		this.canv.style.width  = 32 * size+ 2 * 32 + 'px';
+		this.canv.style.height = 32 * size+ 2 * 32 + 'px';
 		this.oldgrille = new Array(this.size); //map full zero
 		 for ( var i = 0 ; i < this.size; i ++){
-			 this.oldgrille[i]=new Array(this.sizey).fill(0);
+			 this.oldgrille[i]=new Array(this.size).fill(0);
 		 };
-		 this.sol =  document.getElementById("sol");
-		 this.mur = document.getElementById("mur");
-		 this.head = document.getElementById("head");
-		 this.body = document.getElementById("body");
-		 this.fruit = document.getElementById("fruit");
+		 this.head=document.getElementById("head_0");
+		 this.changeSnake(0);
+		 this.changeBckgrnd(0);
+		 this.changeFruit(0);
+		 // console.log("End init : "+ this.sol);
+		 this.drawbackground(size);
+		 console.log(this);
+	}
+
+	changeSnake(text){
+		this.head= document.getElementById("head_"+text);
+		this.body = document.getElementById("body_"+text);
+	}
+	changeBckgrnd(text){
+		this.sol =  document.getElementById("sol_"+text);
+		this.mur = document.getElementById("mur_"+text);
+	}
+	changeFruit(text){
+		this.fruit = document.getElementById("fruit_"+text);
 	}
 
 	drawbackground(dim){
@@ -23,25 +37,34 @@ class View {
 		this.ctx.clearRect( 0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
 		for (var i = 0; i < dim + 3; i++){
 				this.ctx.drawImage(this.mur,i*32,0,32,32);
-				this.ctx.drawImage(this.mur,i*32,704-32,32,32);
+				this.ctx.drawImage(this.mur,i*32,32 * this.size+ 2 * 32-32,32,32);
 				this.ctx.drawImage(this.mur,0,i*32,32,32);
-				this.ctx.drawImage(this.mur,704-32,i*32,32,32);
+				this.ctx.drawImage(this.mur,32 * this.size+ 2 * 32-32,i*32,32,32);
 
 		}
 		for (var i =0; i < dim; i ++){
 			for (var j = 0 ; j < dim; j ++){
 				this.ctx.drawImage(this.sol,32+i*32,32+j*32,32,32);
-				//console.log("Affichage de l'image "+i+":"+j);
 			}
 		}
 	}
-	drawentities(grille, rota){
+
+	drawentities(grille, rota, skin){
+		console.log("Output graph");
+		skin = [ 0,0,0];
+		var head= document.getElementById("head_"+skin[0]);
+		var body = document.getElementById("body_"+skin[0]);
+		var sol =  document.getElementById("sol_"+skin[1]);
+		var mur = document.getElementById("mur_"+skin[1]);
+		var fruit= document.getElementById("fruit_"+skin[2]);
+		console.log(head);
+		console.log(body);
 		for (var i =0; i < grille.length; i ++){
 			for ( var j = 0 ; j<grille.length;j++){
 				var x = 32+i*32;
 				var y = 32+j*32;
 				if (grille[i][j]!=this.oldgrille[i][j]){
-					this.ctx.drawImage(this.sol,x,y,32,32);
+					this.ctx.drawImage(sol,x,y,32,32);
 					this.oldgrille[i][j]=grille[i][j];
 				switch (grille[i][j]){
 					case 1 :
@@ -63,17 +86,14 @@ class View {
 							break;
 					}
 					//console.log("Draw head");
-					this.ctx.drawImage(this.head, 0, 0, 32, 32,-16, -16, 32, 32);
+					this.ctx.drawImage(head, 0, 0, 32, 32,-16, -16, 32, 32);
 					this.ctx.restore();
 					break;
 					case 2 :
-					this.ctx.drawImage(this.body,x,y,32,32);
+					this.ctx.drawImage(body,x,y,32,32);
 					break;
 					case 3 :
-					this.ctx.drawImage(this.fruit,x,y,32,32);
-					break;
-					default :
-					this.ctx.drawImage(this.sol,x,y,32,32);
+					this.ctx.drawImage(fruit,x,y,32,32);
 					break;
 				}
 				}

@@ -8,10 +8,9 @@ class Model {
   drawTiles(){
     this.draw(this.grille, this.snake.direction);
   }
-	constructor(cont) {
-    this.cont = cont
-    this.sizex = 20;
-		this.sizey = 20;
+	constructor(size) {
+    this.sizex = size;
+		this.sizey = size;
 		this.time = 0;
 	    this.grille = new Array(this.sizex); //map full zero
 			for ( var i = 0 ; i < this.sizex; i ++){
@@ -105,7 +104,7 @@ class Model {
       switch(e){
         case 1:
           if(this.snake.direction == 3){
-            console.log('et non');
+            // console.log('et non');
             this.sound(2);
           }else{
             this.snake.direction = 1;
@@ -114,7 +113,7 @@ class Model {
           break;
         case 2:
           if(this.snake.direction == 4){
-            console.log('et non');
+            // console.log('et non');
             this.sound(2);
           }else{
             this.snake.direction = 2;
@@ -123,7 +122,7 @@ class Model {
           break;
         case 3:
           if(this.snake.direction == 1){
-            console.log('et non');
+            // console.log('et non');
             this.sound(2);
           }else{
             this.snake.direction = 3;
@@ -132,7 +131,7 @@ class Model {
           break;
         case 4:
           if(this.snake.direction == 2){
-            console.log('et non');
+            // console.log('et non');
             this.sound(2);
           }else{
             this.snake.direction = 4;
@@ -145,7 +144,7 @@ class Model {
     }
   	move(){//deplace le serpent
 			var head;
-        console.log(this.snake.liste + "dir :"+this.snake.direction);
+        // console.log(this.snake.liste + "dir :"+this.snake.direction);
         switch(this.snake.direction){ //calcul des coords de la prochaine tete selon la direction
           case 1 :
           head = [this.snake.liste[0][0]-1, this.snake.liste[0][1]]
@@ -160,7 +159,7 @@ class Model {
           head = [this.snake.liste[0][0], this.snake.liste[0][1]+1]
           break;
         }
-        console.log("case a check : "+head[0]+" "+head[1]);
+        // console.log("case a check : "+head[0]+" "+head[1]);
 
 
         let lose1 = this.checkWall(head[0], head[1]);
@@ -177,17 +176,18 @@ class Model {
         if(found == 0){ //si on a pas trouvé de fruit
 	      	this.snake.getListe().pop(); //on supprime le dernier element
         }
-        console.log(this.snake.liste);
+        // console.log(this.snake.liste);
         this.setSnake();
-        console.log("dir :"+this.snake.direction);
+        // console.log("dir :"+this.snake.direction);
     }
 
 
 
     checkWall(x, y){
       	if(x >= this.sizex || y>= this.sizey || x < 0 || y < 0){
-      		console.log("PERDU")
+      		// console.log("PERDU")
       		this.sound(2)
+          console.log("Mort de mur coord : " +x + ":" + y);
       		return 1;
       	}
     }
@@ -196,8 +196,9 @@ class Model {
     	//vérifie si la nouvelle tête rencontre le body
 
 	          	if(this.getTile(x,y) == 2){
-	          		console.log("PERDU")
+	          		// console.log("PERDU")
 	          		this.sound(2)
+                console.log("Mort d'auto bouffage coord : "+x + ":" + y);
 	          		return 1;
 	          	}
 
@@ -205,7 +206,7 @@ class Model {
     checkFruit(x, y){
         //vérifie si on mange un fruit
         if(this.grille[x][y] ==  3){
-          	console.log("fruit trouvé");
+          	// console.log("fruit trouvé");
           	this.sound(1);
             this.addFruit();
           	return 1;

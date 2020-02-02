@@ -5,30 +5,27 @@ class Controller {
 		this.view = view;
 		this.interval = null;
 		this.skin = [0,0,0];
+
 		this.bindDrawtoModel = (matrice,dir, score, highscore) =>{
 			this.view.drawentities(matrice,dir, this.skin);
-			this.view.drawscore(score, highscore);
+
+			// console.log(this.skin);
 		};
 		this.model.binddraw(this.bindDrawtoModel);
-		document.getElementById("snake0").addEventListener("click",this.changeSnake(0));
-		document.getElementById("snake1").addEventListener("click",this.changeSnake(1));
-		document.getElementById("level0").addEventListener("click",this.changeBckgrnd(0));
-		document.getElementById("level1").addEventListener("click",this.changeBckgrnd(1));
-		document.getElementById("fruit0").addEventListener("click",this.changeFruit(0));
-		document.getElementById("fruit1").addEventListener("click",this.changeFruit(1));
+		window.addEventListener('keydown',(e)=>{this.clavier(e)});
 	}
 
 	changeSnake(text){
 		this.skin[0]=text;
-
+		this.reloadGfx();
 	}
 	changeBckgrnd(text){
 		this.skin[1]=text;
-
+		this.reloadGfx();
 	}
 	changeFruit(text){
 		this.skin[2]=text;
-
+		this.reloadGfx();
 	}
 
 	//A changer, preferer des events sur les touches importantes qui trigger la methode turn;
@@ -37,7 +34,12 @@ class Controller {
 		let k = e.keyCode;
 		// console.log(k)
 		e.preventDefault(); //annuler le comportement par défaut des flèches
-
+		if (this.model.mort == 1){
+			if (k == 82){ // si on appui sur R => reset
+				this.reset();
+			}
+			return;
+		}
 		switch(k) {
 			case 37 : // touche gauche
 			this.model.turn(1)
@@ -51,8 +53,8 @@ class Controller {
 			case 40 : // touche bas
 			this.model.turn(4)
 			break;
-			case 82:
-			this.model.reset();
+			case 82 :
+			this.reset();
 			break;
 			default :
 		}
@@ -60,32 +62,43 @@ class Controller {
 
 
 
-	run(){
+	InitRun(){
 		console.log("Starting Game ");
-		this.model.setcontroller(this);
-		window.addEventListener('keydown',this.clavier);
-		this.interval = setInterval(()=> {this.model.step()}, 1/document.getElementById("speed").value * 1000); //chaque seconde execute un step
-		this.printscore = setInterval(()=> {this.view.drawscore(this.model)}, 100);
+		this.interval = setInterval(()=> {this.run()}, 1/document.getElementById("speed").value * 1000); //chaque seconde execute un step
+		this.printscore = setInterval(()=> {this.view.drawscore(this.model.score, this.model.highscore)}, 100);
+	}
+	run(){
+		if(this.model.mort == 0){
+			this.model.step();
+		}
+		else {
+			this.pause();
+		}
 	}
 
 	pause(){
 		clearInterval(this.interval);
-		this.ispaused=1;
+		clearInterval(this.printscore);
 	}
 
 	reset(){
-		console.log("reset");
-		this.model.setscore();
-		this.model.deleteFruit();
-		this.model.removeSnake()
-		this.model.snake.resetBody(this.model.sizex, this.model.sizey)
-		this.model.addFruit()
+		this.pause();
+		this.model.reset();
+		this.reloadbg();
 		this.sleep(500)
-		this.view.drawhighscore(this.model)
-		this.run()
+		this.InitRun()
 		return;
 	}
+	reloadbg(){
+		this.view.drawbackground(this.model.sizex, this.skin);
+		this.model.drawTiles();
+	}
 
+	reloadGfx(){
+		this.view.resetentities();
+		this.reloadbg();
+
+	}
 	sleep(milliseconds) {
 		var start = new Date().getTime();
 		for (var i = 0; i < 1e7; i++) {

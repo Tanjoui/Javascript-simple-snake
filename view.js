@@ -1,5 +1,5 @@
 class View {
-	constructor(size) {
+	constructor(size, skin) {
 		this.size = size;
 		this.canv = document.getElementById("Canvas");
 		this.ctx = this.canv.getContext("2d");
@@ -11,54 +11,35 @@ class View {
 		 for ( var i = 0 ; i < this.size; i ++){
 			 this.oldgrille[i]=new Array(this.size).fill(0);
 		 };
-		 this.head=document.getElementById("head_0");
-		 this.changeSnake(0);
-		 this.changeBckgrnd(0);
-		 this.changeFruit(0);
-		 // console.log("End init : "+ this.sol);
-		 this.drawbackground(size);
-		 console.log(this);
-	}
-
-	changeSnake(text){
-		this.head= document.getElementById("head_"+text);
-		this.body = document.getElementById("body_"+text);
-	}
-	changeBckgrnd(text){
-		this.sol =  document.getElementById("sol_"+text);
-		this.mur = document.getElementById("mur_"+text);
-	}
-	changeFruit(text){
-		this.fruit = document.getElementById("fruit_"+text);
+		 this.drawbackground(size,skin);
 	}
 
 	drawscore(score, highscore){
-		if(highscore * 4 < score){
-			document.getElementById("score").style.color = "red"
-		}else if(highscore * 2 < score){
-			document.getElementById("score").style.color = "green"
-		}else if(highscore < model.score){
-			document.getElementById("score").style.color = "yellow"
-		}else{
-			document.getElementById("score").style.color = "black"
+		var fd_score = document.getElementById("score_0");
+		for ( var i = 0 ; i < 7; i ++){
+			this.ctx.drawImage(fd_score,i*32,0,32,32);
+			this.ctx.drawImage(fd_score,i*32,this.size*32+32,32,32);
 		}
-		document.getElementById("score").innerHTML = model.score
-	}
 
-	drawhighscore(model){
-		document.getElementById("highscore").innerHTML = model.highscore
-	}
+		this.ctx.save();
+		this.ctx.font="30px Arial";
+		this.ctx.fillText("Score :" + score,0,30)
+		this.ctx.fillText("HS :"+highscore,0,30+this.size*32+32);
+		this.ctx.restore();
+}
 
 
-	drawbackground(dim){
 
+
+	drawbackground(dim,skin){
+		this.sol =  document.getElementById("sol_"+skin[1]);
+		this.mur = document.getElementById("mur_"+skin[1]);
 		this.ctx.clearRect( 0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
 		for (var i = 0; i < dim + 3; i++){
 				this.ctx.drawImage(this.mur,i*32,0,32,32);
 				this.ctx.drawImage(this.mur,i*32,32 * this.size+ 2 * 32-32,32,32);
 				this.ctx.drawImage(this.mur,0,i*32,32,32);
 				this.ctx.drawImage(this.mur,32 * this.size+ 2 * 32-32,i*32,32,32);
-
 		}
 		for (var i =0; i < dim; i ++){
 			for (var j = 0 ; j < dim; j ++){
@@ -67,16 +48,18 @@ class View {
 		}
 	}
 
+	resetentities(){
+		this.oldgrille = new Array(this.size);
+		 for ( var i = 0 ; i < this.size; i ++){
+			 this.oldgrille[i]=new Array(this.size).fill(0);
+		 };
+	}
 	drawentities(grille, rota, skin){
-		console.log("Output graph");
-		skin = [ 0,0,0];
 		var head= document.getElementById("head_"+skin[0]);
 		var body = document.getElementById("body_"+skin[0]);
 		var sol =  document.getElementById("sol_"+skin[1]);
 		var mur = document.getElementById("mur_"+skin[1]);
 		var fruit= document.getElementById("fruit_"+skin[2]);
-		console.log(head);
-		console.log(body);
 		for (var i =0; i < grille.length; i ++){
 			for ( var j = 0 ; j<grille.length;j++){
 				var x = 32+i*32;
@@ -88,7 +71,6 @@ class View {
 					case 1 :
 					this.ctx.save();
 					this.ctx.translate(x+16,y+16);
-					console.log("Rota : " + rota);
 					switch (rota){
 							case 1 :
 							this.ctx.rotate( -90 *(Math.PI/180));
@@ -119,7 +101,7 @@ class View {
 		}
 	}
 	logtab(grille){
-		console.log("affichage de la grille ");
+		// console.log("affichage de la grille ");
 		var text="";
 		for (var i = 0; i < grille.length; i ++ ){
 			for ( var j = 0; j < grille.length ; j ++ ){

@@ -1,9 +1,5 @@
 class Model {
 
-  setcontroller(c){
-    this.cont = c;
-  }
-
 
   drawTiles(){
     this.draw(this.grille, this.snake.direction, this.score, this.highscore);
@@ -15,26 +11,32 @@ class Model {
     this.score = 0;
     this.highscore = 0;
     this.time = 0;
-    this.grille = new Array(this.sizex); //map full zero
-    for ( var i = 0 ; i < this.sizex; i ++){
-      this.grille[i]=new Array(this.sizey).fill(0);
-    }
-    this.snake = new Snake(this.sizex, this.sizey);
+    this.grille = this.initgrille(size,size);
+    this.snake = new Snake(size,size);
     this.setSnake();
     //création de la carte et d'un seprent
     this.xFruit = 0;
     this.yFruit = 0;
+    this.mort=0;
     this.addFruit(); //on place un fruit
 
+  }
+  initgrille(x,y){
+    var grille = new Array(x); //map full zero
+    for ( var i = 0 ; i < x; i ++){
+      grille[i]=new Array(y).fill(0);
+    }
+    return grille;
   }
 
   setscore(){
     if(this.score>this.highscore){
       this.highscore = this.score;
     }
-    this.score = 0;
   }
-
+  resetScore(){
+    this.score=0;
+  }
   binddraw(callback){
     this.draw=callback;
   }
@@ -51,6 +53,7 @@ class Model {
       }
     }
   }
+
   getTile(x,y){
     //console.log("Tentative d'accee a la grille coord" +x + ":"+y);
     if (x < this.sizex && x >= 0 && y < this.sizey && y >= 0){
@@ -58,27 +61,28 @@ class Model {
       return this.grille[x][y];
     }
     else {
-      return 0;
+      return -1;
     }
   }
+
   getgrille(){
     return this.grille;
   }
+
   deleteFruit(){
     this.setTile(this.xFruit, this.yFruit, 0)
   }
 
   addFruit(){
-    let x = Math.floor(Math.random() * (this.sizex));
-    let y = Math.floor(Math.random() * this.sizey);
-    while (this.getTile(x,y) != 0){
-      x = Math.floor(Math.random() * (this.sizex));
-      y = Math.floor(Math.random()* this.sizey);
-    }
+    do {
+      var x = Math.floor(Math.random() * (this.sizex));
+      var y = Math.floor(Math.random()* this.sizey);
+    } while (this.getTile(x,y) != 0);
     this.xFruit = x;
     this.yFruit = y;
     this.setTile(x,y,3);
   }
+
   removeSnake(){
     let liste = this.snake.getListe();
     for (var i = 0; i < liste.length; i ++) {
@@ -90,7 +94,7 @@ class Model {
   }
 
   setSnake(){
-    let liste = this.snake.getListe();
+    let liste = this.snake.liste;
     this.setTile(liste[0][0],liste[0][1],1);
 
     for (var i = 1; i < liste.length; i ++) {
@@ -107,15 +111,14 @@ class Model {
     this.time = this.time+1;
     this.move(); //nouveau mouvement
     this.drawTiles();
-    this.score ++
+    this.score ++;
+    this.setscore();
     return this.grille;
   }
 
   turn(e){
-    console.log(this.snake.getBodyDir());
     if (e == this.snake.getBodyDir()){
         this.sound(2);
-        console.log("Lol nope ");
         return;
     }
     switch(e){
@@ -181,8 +184,7 @@ class Model {
     let lose1 = this.checkWall(head[0], head[1]);
     let lose2 = this.checkBody(head[0], head[1]);
     if(lose1 == 1 || lose2 == 1){
-      //this.cont.interval = setTimeout(wait, 200);
-      this.cont.pause();
+      this.mort = 1;
       return 0;
     }
 
@@ -231,11 +233,6 @@ class Model {
     }
   }
 
-  reset(){
-    this.cont.reset();
-  }
-
-
 
   sound(id){// joue un son donné
     var bruit = new Audio();
@@ -253,5 +250,14 @@ class Model {
     bruit.play();
   }
 
+reset(){
+  this.resetScore();
+  this.deleteFruit();
+  this.removeSnake();
+  this.snake.resetBody(this.sizex,this.sizey);
+  this.mort=0;
+  this.addFruit();
+
+}
 
 }

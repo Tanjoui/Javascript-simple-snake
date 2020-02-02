@@ -6,8 +6,8 @@ class Snake {
 
 	resetBody(sx, sy){
 		this.liste = [];
-		let x = Math.floor(Math.random() * sx);
-	  	let y = Math.floor(Math.random() * sy);
+		let x = Math.floor(Math.random() * (sx-6) + 3);
+	  let y = Math.floor(Math.random() * (sy-6) + 3);
 		let direction = Math.floor(Math.random() * 3 + 1);
 		this.direction = direction;
 		switch(direction){
@@ -46,8 +46,7 @@ class Snake {
 	constructor(sx, sy){
 
 
-	    this.liste = new Array(0); //liste des maillons
-		this.vivant = true; //vivant
+	 	this.liste = new Array(0); //liste des maillons
 		this.resetBody(sx, sy)
 
 	}

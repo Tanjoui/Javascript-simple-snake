@@ -1,4 +1,10 @@
-	var model = new Model(document.getElementById("taille").value);
-	var view = new View(document.getElementById("taille").value);
-	const app = new Controller(model, view)
-  app.run();
+	var model = new Model(20);
+	var view = new View(20, [0,0,0]);
+	const app = new Controller(model, view);
+	document.getElementById("snake1").addEventListener("click",()=> {app.changeSnake("1")});
+	document.getElementById("level1").addEventListener("click",()=> {app.changeBckgrnd("1")});
+	document.getElementById("fruit1").addEventListener("click",()=> {app.changeFruit("1")});
+	document.getElementById("snake0").addEventListener("click",()=> {app.changeSnake("0")});
+	document.getElementById("fruit0").addEventListener("click",()=> {app.changeFruit("0")});
+	document.getElementById("level0").addEventListener("click",()=> {app.changeBckgrnd("0")});
+  app.InitRun();

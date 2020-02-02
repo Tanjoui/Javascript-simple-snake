@@ -9,38 +9,47 @@
 	<body>
     <div id="slt"></div>
     <canvas id="Canvas" width="704" height="704" ></canvas>
-    <img id="sol_0" hidden src="./Image/boardgame.png"
+    <img id="sol_0" hidden src="./Image/floor0.png"
        width="32" height="32">
-       <img id="mur_0" hidden src="./Image/wall.png"
+       <img id="mur_0" hidden src="./Image/wall0.png"
           width="32" height="32">
-          <img id="head_0" hidden src="./Image/headsnake.png"
+          <img id="head_0" hidden src="./Image/head0.png"
              width="32" height="32">
-             <img id="body_0" hidden src="./Image/bodysnake.png"
+             <img id="body_0" hidden src="./Image/body0.png"
                 width="32" height="32">
-                <img id="fruit_0" hidden src="./Image/food.png"
+                <img id="fruit_0" hidden src="./Image/food0.png"
                    width="32" height="32">
-                   <img id="mur_1" hidden src="./Image/floor2.png"
+                   <img id="mur_1" hidden src="./Image/wall1.png"
                       width="32" height="32">
-                      <img id="sol_1" hidden src="./Image/boardgame.png"
+                      <img id="sol_1" hidden src="./Image/floor1.png"
                          width="32" height="32">
                          <img id="score_0" hidden src="./Image/score.png"
                             width="32" height="32">
+                            <img id="fruit_1" hidden src="./Image/food1.png"
+                               width="32" height="32">
+                               <img id="body_1" hidden src="./Image/body1.png"
+                                  width="32" height="32">
+                                  <img id="head_1" hidden src="./Image/head1.png"
+                                     width="32" height="32">
 
 
     <form id="settings">
       <input type="range" id= "speed" name = "speed" min = "0.5" max ="10">
-      <label for="speed"> Vitesse ( tiles / sec )</label></input>
+      <label for="speed" id="lblspeed"> Vitesse ( tiles / sec )</label></input>
       </input>
       <br>
       Serpent :
       <button id="snake0" type="button">Skin par defaut</button>
       <button id="snake1" type="button">Skin Techno</button>
+      <br>
       Environnement :
       <button id="level0" type="button">Skin par defaut</button>
       <button id="level1" type="button">Skin Techno</button>
+      <br>
       Fruit :
       <button id="fruit0" type="button">Skin par defaut</button>
       <button id="fruit1" type="button">Skin Techno</button>
+      <br>
 
       </form>
 

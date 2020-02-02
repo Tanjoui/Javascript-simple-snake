@@ -79,6 +79,7 @@ class Controller {
 	pause(){
 		clearInterval(this.interval);
 		clearInterval(this.printscore);
+		this.view.printreset();
 	}
 
 	reset(){

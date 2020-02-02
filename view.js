@@ -23,11 +23,20 @@ class View {
 
 		this.ctx.save();
 		this.ctx.font="30px Arial";
+		this.ctx.fillStyle="white";
 		this.ctx.fillText("Score :" + score,0,30)
 		this.ctx.fillText("HS :"+highscore,0,30+this.size*32+32);
 		this.ctx.restore();
 }
 
+printreset(){
+	this.ctx.save();
+	this.ctx.font="30px Arial";
+	this.ctx.fillStyle="white";
+	this.ctx.fillText("Appuyez sur 'R' pour reset",64,64)
+
+	this.ctx.restore();
+}
 
 
 
@@ -73,16 +82,16 @@ class View {
 					this.ctx.translate(x+16,y+16);
 					switch (rota){
 							case 1 :
-							this.ctx.rotate( -90 *(Math.PI/180));
+							this.ctx.rotate( 90 *(Math.PI/180));
 							break;
 							case 2 :
-							this.ctx.rotate( 0 );
+							this.ctx.rotate( 180 *(Math.PI/180 ));
 							break;
 							case 3 :
-							this.ctx.rotate(  90*(Math.PI/180));
+							this.ctx.rotate(  -90*(Math.PI/180));
 							break;
 							case 4 :
-							this.ctx.rotate(180*(Math.PI/180));
+							this.ctx.rotate(0*(Math.PI/180));
 							break;
 					}
 					//console.log("Draw head");
